@@ -25,12 +25,14 @@ func usage() int {
 func tailFile(c chan string, path, color string) {
 	seek := tail.SeekInfo{Offset: 0, Whence: os.SEEK_END}
 	t, err := tail.TailFile(path, tail.Config{Follow: true, MustExist: true, ReOpen: true, Location: &seek, Logger: tail.DiscardingLogger})
+	p := strings.Split(path, "/")
+	fileName := p[len(p)-1]
 	if err != nil {
 		fmt.Println("error opening", path, ":", err)
 		os.Exit(1)
 	} else {
 		for line := range t.Lines {
-			text := color + line.Text + ansi.Reset
+			text := color + fileName + ": " + line.Text + ansi.Reset
 			c <- text
 		}
 	}
@@ -50,7 +52,6 @@ func runMain() int {
 		var path = ""
 		var color = ""
 		parts := strings.Split(arg, ":")
-		fmt.Println("parts:", parts)
 		if len(parts) == 1 {
 			path = parts[0]
 			color = ansi.Reset
