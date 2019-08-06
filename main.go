@@ -24,7 +24,7 @@ func usage() int {
 
 func tailFile(c chan string, path, color string) {
 	seek := tail.SeekInfo{Offset: 0, Whence: os.SEEK_END}
-	t, err := tail.TailFile(path, tail.Config{Follow: true, MustExist: true, ReOpen: true, Location: &seek})
+	t, err := tail.TailFile(path, tail.Config{Follow: true, MustExist: true, ReOpen: true, Location: &seek, Logger: tail.DiscardingLogger})
 	if err != nil {
 		fmt.Println("error opening", path, ":", err)
 		os.Exit(1)
