@@ -65,16 +65,13 @@ type Line struct {
 func tailFile(c chan *Line, path, color string, lineCount int) {
 	offset, err := tailOffset(path, lineCount)
 	if err != nil {
-		fmt.Println("error opening", path, ":", err)
 		c <- &Line{path: path, text: "", err: err}
 	}
-	fmt.Println("seeking", path, "to", offset)
 	seek := tail.SeekInfo{Offset: offset, Whence: os.SEEK_SET}
 	t, err := tail.TailFile(path, tail.Config{Follow: true, MustExist: true, ReOpen: true, Location: &seek, Logger: tail.DiscardingLogger})
 	p := strings.Split(path, "/")
 	fileName := p[len(p)-1]
 	if err != nil {
-		fmt.Println("error opening", path, ":", err)
 		c <- &Line{path: path, text: "", err: err}
 	} else {
 		for line := range t.Lines {
