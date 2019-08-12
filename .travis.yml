@@ -22,6 +22,7 @@ deploy:
   - haxxet.linux.amd64
   - haxxet.darwin.amd64
   - haxxet.windows.amd64.exe
+  skip_cleanup: true
   on:
     tags: true
     repo: csm/haxxet
