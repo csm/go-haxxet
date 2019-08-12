@@ -2,29 +2,26 @@ language: go
 sudo: false
 matrix:
   include:
-    - go: 1.x
-      env: LATEST=true
-
+  - go: 1.x
+    env: LATEST=true
 before_install:
-  - go get github.com/mitchellh/gox
-
+- go get github.com/mitchellh/gox
 install:
-  - # skip
-
+- 
 script:
-  - go get -v -t ./...
-  - diff -u <(echo -n) <(gofmt -d .)
-  - go vet $(go list ./... | grep -v /vendor/)
-  - if [ "${LATEST}" = "true" ]; then gox -os="linux darwin windows" -arch="amd64" -output="haxxet.{{.OS}}.{{.Arch}}" -ldflags "-X main.Rev=`git rev-parse --short HEAD `" -verbose ./...; fi
-  
+- go get -v -t ./...
+- diff -u <(echo -n) <(gofmt -d .)
+- go vet $(go list ./... | grep -v /vendor/)
+- if [ "${LATEST}" = "true" ]; then gox -os="linux darwin windows" -arch="amd64" -output="haxxet.{{.OS}}.{{.Arch}}" -ldflags "-X main.Rev=`git rev-parse --short HEAD `" -verbose ./...; fi
+
 deploy:
   provider: releases
-  skip_cleanup: true
+  api_key:
+    secure: JNzYgigYH7zfMJXjL4Kt398Gs8WcjO+DJX/Qgeh4YefAWcAhwKMLvjhODzacNeZ+TKBavkrDQ8gPc8YAZF2CNq8uvjHDqxPqdlCOMN2P8bKQonc3X/TU6ZV0vR7KKRNTbiJJlqflOgBFj3sW395ftXpYBFxppLbVyAWvpZhkx9t1pluQ9YuR6GsD4A6xl8exsn47FPYPVMs47aae/5qsq246Draqf9fdH0eFBEaTJG10DRdFMR2lqwH7fSmfmYR6KsXJ1wwu92APJHtm/AupMyfjT6Txfy4XSB571M8COs4u/AFPU8iLyR2aEilUfQaAiAwk+hhb6qusp1MWlnArQP86QzgnXLGxXe0yjqOpuEu2X2u9bcqpPnyn4YPT1voDePspoKfQI58GEEOuTwBFWpGkLkP9MzGyFuRu4AQdjSjUw7buebUQbzGwAr9sLuwNBbge6biFSWJnMB0wIMlYPHyXTyOm0vVSqKPMM2mrS8XOEhHeogx8cafyDatkes2Mde/7bgzhZB6Vf1J5K4Iqi9h+57FNfxQH4OKwTeYiE/enh5iZJuDUR4oXuW3tbNEtfQT/81jkC7wbm3pIMFgKxhkDYyp5LwIuYugCIgIsdyzOuOpfOSHaRtnVnyFZcWvhBdmfvDyOsIltizLsZhzjkHtVkbIwwR5fiQJovVRx1no=
   file:
-    - haxxet.windows.amd64.exe
-    - haxxet.darwin.amd64
     - haxxet.linux.amd64
+    - haxxet.darwin.amd64
+    - haxxet.windows.amd64.exe
   on:
-    repo: csm/haxxet
     tags: true
-    condition: $LATEST = true
+    repo: csm/haxxet
