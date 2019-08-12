@@ -111,5 +111,4 @@ func runMain() int {
 			fmt.Println(line.text)
 		}
 	}
-	return 0
 }
