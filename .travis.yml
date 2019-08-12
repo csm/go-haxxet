@@ -1,0 +1,30 @@
+language: go
+sudo: false
+matrix:
+  include:
+    - go: 1.x
+      env: LATEST=true
+
+before_install:
+  - go get github.com/mitchellh/gox
+
+install:
+  - # skip
+
+script:
+  - go get -v -t ./...
+  - diff -u <(echo -n) <(gofmt -d .)
+  - go vet $(go list ./... | grep -v /vendor/)
+  - if [ "${LATEST}" = "true" ]; then gox -os="linux darwin windows" -arch="amd64" -output="haxxet.{{.OS}}.{{.Arch}}" -ldflags "-X main.Rev=`git rev-parse --short HEAD `" -verbose ./...; fi
+  
+deploy:
+  provider: releases
+  skip_cleanup: true
+  file:
+    - haxxet.windows.amd64.exe
+    - haxxet.darwin.amd64
+    - haxxet.linux.amd64
+  on:
+    repo: csm/haxxet
+    tags: true
+    condition: $LATEST = true

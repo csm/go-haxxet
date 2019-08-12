@@ -23,11 +23,12 @@ func main() {
 }
 
 func usage() int {
-	fmt.Println("usage: haxxet file1[:color] [file2[:color] ...]")
+	fmt.Println("usage: haxxet [-count N] file1[:color] [file2[:color] ...]")
 	fmt.Println("")
 	fmt.Println("Each entry is a file path to follow and print lines to the console.")
 	fmt.Println("An optional color name can be given after the file name, which will")
 	fmt.Println("color the output with that ANSI color name.")
+	fmt.Println()
 	flag.PrintDefaults()
 	return 0
 }
